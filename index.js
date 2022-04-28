@@ -29,8 +29,6 @@ document.getElementById("inputfile").addEventListener("change", function () {
   fr.readAsText(this.files[0]);
 });
 
-// how to set up the calculation rules?
-
 function getPay(line) {
   let weekdays = ["MO", "TU", "WE", "TH", "FR"];
   // get employee name
