@@ -41,7 +41,7 @@ function getPay(line) {
     let days = fs[1].split(",");
     let pay = 0;
 
-    days.forEach((element) => {
+    for (let element of days) {
       if (element !== "") {
         let day = element.charAt(0) + element.charAt(1);
         let times = element.replace(day, "").split("-");
@@ -52,6 +52,10 @@ function getPay(line) {
 
         if (t2 == 0) {
           t2 = 24;
+        }
+
+        if (t2 <= t1) {
+          return 0;
         }
 
         if (weekdays.includes(day)) {
@@ -76,7 +80,7 @@ function getPay(line) {
           }
         }
       }
-    });
+    }
 
     return [employeeName, pay];
   } catch (error) {
