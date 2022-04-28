@@ -4,37 +4,48 @@ document.getElementById("inputfile").addEventListener("change", function () {
   fr.onload = function () {
     document.getElementById("output").textContent = "";
     let res = fr.result;
-    let lines = res.split(/\r\n|\n/);
-    for (let line of lines) {
-      if (line !== "") {
-        a = getPay(line);
-        if (a !== 0) {
-          tag = document.createElement("p");
-          txt = document.createTextNode(
-            "The amount to pay " + a[0] + " is " + a[1].toString() + " USD \n"
-          );
-          tag.append(txt);
-          document.getElementById("output").append(tag);
-        } else {
-          tag = document.createElement("p");
-          txt = document.createTextNode("Format error");
-          tag.append(txt);
-          document.getElementById("output").append(tag);
-          break;
-        }
-      }
+    let timesheet = res.split(/\r\n|\n/);
+    for (let entry of timesheet) {
+      if (!entry) return;
+      buildOutput(entry);
     }
   };
 
   fr.readAsText(this.files[0]);
 });
 
+function buildOutput(entry) {
+  employee = getPay(entry);
+  if (!!employee) {
+    line = document.createElement("p");
+    txt = document.createTextNode(
+      "The amount to pay " +
+        employee[0] +
+        " is " +
+        employee[1].toString() +
+        " USD \n"
+    );
+    line.append(txt);
+    document.getElementById("output").append(line);
+  } else {
+    line = document.createElement("p");
+    txt = document.createTextNode("Format error");
+    line.append(txt);
+    document.getElementById("output").append(line);
+  }
+}
+
 function getPay(line) {
-  let weekdays = ["MO", "TU", "WE", "TH", "FR"];
+  const WEEKDAYS = ["MO", "TU", "WE", "TH", "FR"];
+  const WEEKEND = ["SA", "SU"];
   // get employee name
   try {
     let fs = line.split("=");
     let employeeName = fs[0];
+
+    if (employeeName.search(/([A-Z])+/g) == -1) {
+      return 0;
+    }
     // get days worked
     let days = fs[1].split(",");
     let pay = 0;
@@ -54,7 +65,7 @@ function getPay(line) {
           return 0;
         }
 
-        if (weekdays.includes(day)) {
+        if (WEEKDAYS.includes(day)) {
           for (let i = t1; i < t2; i++) {
             if (i >= 0 && i < 9) {
               pay += 25;
@@ -64,7 +75,7 @@ function getPay(line) {
               pay += 20;
             }
           }
-        } else {
+        } else if (WEEKEND.includes(day)) {
           for (let i = t1; i < t2; i++) {
             if (i >= 0 && i < 9) {
               pay += 30;
@@ -74,6 +85,8 @@ function getPay(line) {
               pay += 25;
             }
           }
+        } else {
+          return 0;
         }
       }
     }
