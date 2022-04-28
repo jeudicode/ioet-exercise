@@ -46,9 +46,7 @@ function getPay(line) {
         let day = element.charAt(0) + element.charAt(1);
         let times = element.replace(day, "").split("-");
         let t1 = times[0].split(":")[0];
-        let m1 = times[0].split(":")[1];
         let t2 = times[1].split(":")[0];
-        let m2 = times[1].split(":")[1];
 
         if (t2 == 0) {
           t2 = 24;
