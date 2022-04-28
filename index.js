@@ -9,7 +9,7 @@ document.getElementById("inputfile").addEventListener("change", function () {
         a = getPay(element);
         tag = document.createElement("p");
         txt = document.createTextNode(
-          "The amount to pay " + a[0] + " is " + a[1].toString() + "\n"
+          "The amount to pay " + a[0] + " is " + a[1].toString() + " USD \n"
         );
         tag.append(txt);
         document.getElementById("output").append(tag);
