@@ -2,6 +2,7 @@ document.getElementById("inputfile").addEventListener("change", function () {
   var fr = new FileReader();
 
   fr.onload = function () {
+    document.getElementById("output").textContent = "";
     let res = fr.result;
     let lines = res.split(/\r\n|\n/);
     for (let line of lines) {
